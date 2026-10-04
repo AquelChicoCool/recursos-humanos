@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Gestión de Empleados</h2>
+    <a href="{{ url_for('crear_empleado') }}" class="btn btn-primary"><i class="bi bi-person-plus-fill me-1"></i>Nuevo Empleado</a>
+</div>
+
+<div class="card p-3 mb-4">
+    <form method="GET" class="row g-2">
+        <div class="col-md-4">
+            <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o cargo..." value="{{ search }}">
+        </div>
+        <div class="col-md-3">
+            <select name="departamento" class="form-select">
+                <option value="">Todos los Departamentos</option>
+                {% for d in departamentos %}
+                <option value="{{ d }}" {% if depto_filter == d %}selected{% endif %}>{{ d }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="estado" class="form-select">
+                <option value="">Todos los Estados</option>
+                <option value="activo" {% if estado_filter == 'activo' %}selected{% endif %}>Activo</option>
+                <option value="inactivo" {% if estado_filter == 'inactivo' %}selected{% endif %}>Inactivo</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-outline-secondary w-100">Filtrar</button>
+        </div>
+    </form>
+</div>
+
+<div class="card">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0 align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>RUT</th>
+                    <th>Nombre Completo</th>
+                    <th>Email</th>
+                    <th>Cargo</th>
+                    <th>Departamento</th>
+                    <th>Estado</th>
+                    <th class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emp in empleados %}
+                <tr>
+                    <td>{{ emp.rut }}</td>
+                    <td>{{ emp.nombre }} {{ emp.apellido }}</td>
+                    <td>{{ emp.email }}</td>
+                    <td>{{ emp.cargo }}</td>
+                    <td>{{ emp.departamento }}</td>
+                    <td>
+                        <span class="badge {{ 'badge-activo' if emp.estado == 'activo' else 'badge-inactivo' }}">
+                            {{ emp.estado | capitalize }}
+                        </span>
+                    </td>
+                    <td class="text-end">
+                        <a href="{{ url_for('editar_empleado', id=emp.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                        <button class="btn btn-sm btn-outline-danger" onclick="confirmarEliminacion('{{ emp.id }}', '{{ emp.nombre }} {{ emp.apellido }}')">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-4">No se encontraron empleados registrados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

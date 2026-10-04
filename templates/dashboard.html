@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Dashboard General</h2>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card p-3 card-stat bg-white">
+            <div class="text-muted small">Total Empleados</div>
+            <div class="fs-2 fw-bold text-primary">{{ total }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-3 card-stat bg-white" style="border-left-color: #166534;">
+            <div class="text-muted small">Empleados Activos</div>
+            <div class="fs-2 fw-bold text-success">{{ activos }}</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-3 card-stat bg-white" style="border-left-color: #991b1b;">
+            <div class="text-muted small">Empleados Inactivos</div>
+            <div class="fs-2 fw-bold text-danger">{{ inactivos }}</div>
+        </div>
+    </div>
+</div>
+
+<div class="card p-4">
+    <h5 class="card-title mb-3">Distribución por Departamento</h5>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Departamento</th>
+                    <th>Cantidad de Empleados</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for depto, cant in deptos.items() %}
+                <tr>
+                    <td>{{ depto }}</td>
+                    <td><span class="badge bg-secondary rounded-pill">{{ cant }}</span></td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="2" class="text-center text-muted">No hay registros de empleados.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
